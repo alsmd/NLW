@@ -2,6 +2,7 @@
 
 
 (function (){
+    "use strict"
     var btn = document.querySelector("#add-time");
     var acesso = true;
     btn.addEventListener("click",addfield);
