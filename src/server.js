@@ -54,7 +54,8 @@ const weekdays = [
 
 //Functions
 function getSubject(subjectNumber){
-    return subjects[subjectNumber - 1]
+    const position = +subjectNumber - 1
+    return subjects[position]
 }
 function getWeekday(weekday){
     return weekdays[weekday]
@@ -71,6 +72,7 @@ function pageStudy(req,res){
 
 function pageGiveClasses(req,res){
     const data = req.query;
+    //data.subject = getSubject(data.subject) // caso eu fosse dar um push no proffys dereto com o data eu teria que tratar tanto o subject quanto o weekday para aparecer como string e nao como number
     //criando um novo objeto proffy com os dados recebidos
     var proffy = new Professor(data);
     const isNotEmpty = Object.keys(data).length > 0;
@@ -99,8 +101,7 @@ function Professor(objeto){
 
 }
 
-const express = require('express');
-const server = express();
+
 
 //Configurando nunjucks  (template egine)
 const nunjucks = require('nunjucks');
@@ -111,9 +112,10 @@ nunjucks.configure('src/views', {
 })
 
 
+const express = require('express');
+const server = express();
 
-
-//inicio e Configuração do servidor
+//inicio e configuro o servidor
 server.use(express.static("public"))   // arquivos static sao arquivos como css/js/images     
 .get("/", pageLanding)// quando eu entrar na "/" essa função ira me retornar uma resposta "/" é a rota) //uma configuração do servidor     
 .get("/estudar",pageStudy)
