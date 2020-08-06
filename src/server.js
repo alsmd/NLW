@@ -101,7 +101,8 @@ function Professor(objeto){
 
 }
 
-
+const express = require('express');
+const server = express();
 
 //Configurando nunjucks  (template egine)
 const nunjucks = require('nunjucks');
@@ -112,10 +113,9 @@ nunjucks.configure('src/views', {
 })
 
 
-const express = require('express');
-const server = express();
 
-//inicio e configuro o servidor
+
+//inicio e Configuração do servidor
 server.use(express.static("public"))   // arquivos static sao arquivos como css/js/images     
 .get("/", pageLanding)// quando eu entrar na "/" essa função ira me retornar uma resposta "/" é a rota) //uma configuração do servidor     
 .get("/estudar",pageStudy)
