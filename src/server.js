@@ -53,7 +53,12 @@ const weekdays = [
 ]
 
 //Functions
-
+function getSubject(subjectNumber){
+    return subjects[subjectNumber - 1]
+}
+function getWeekday(weekday){
+    return weekdays[weekday]
+}
 //Requisições
 function pageLanding(req,res){//req/ requisição vai me trazer mais informaçoes // res/resposta é oque vai mostrar pra min em tela 
     return res.render("index.html");
@@ -65,20 +70,30 @@ function pageStudy(req,res){
 }
 
 function pageGiveClasses(req,res){
-    const dados = req.query;
-    var proffy = new Professor(dados);
-    
-    proffys.push(proffy);
+    const data = req.query;
+    //criando um novo objeto proffy com os dados recebidos
+    var proffy = new Professor(data);
+    const isNotEmpty = Object.keys(data).length > 0;
+
+    //inserindo o novo objeto proffy na minha coleção
+    if(isNotEmpty) {
+        proffys.push(proffy); //eu poderia ter colocado o data direto no push, pois o data ja é um objeto
+
+        return res.redirect("/estudar")
+    }
+
     return res.render("darAulas.html", {subjects,weekdays});
 }
+
+//Function responsavel por receber os dados e inserir em um objeto que sera o professor
 function Professor(objeto){
     this.nome = objeto.nome;
     this.avatar = objeto.avatar;
     this.whatsapp = objeto.whatsapp;
     this.bio = objeto.bio;
-    this.subject = objeto.subject;
+    this.subject =  getSubject(objeto.subject);
     this.cost = objeto.cost;
-    this.weekday = objeto.weekday;
+    this.weekday = getWeekday(objeto.weekday);
     this.time_from = objeto.time_from;
     this.time_to = objeto.time_to;
 
