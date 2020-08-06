@@ -38,7 +38,7 @@ const subjects = [
     "Historia",
     "Matematica",
     "Português",
-    "Quimica"
+    "Quimica",
 
 ]
 const weekdays = [
@@ -48,7 +48,8 @@ const weekdays = [
     "Quarta-feira",
     "Quinta-feira",
     "Sexta-feira",
-    "Sabado"
+    "Sabado",
+
 ]
 
 //Functions
@@ -64,9 +65,24 @@ function pageStudy(req,res){
 }
 
 function pageGiveClasses(req,res){
-    return res.render("darAulas.html");
+    const dados = req.query;
+    var proffy = new Professor(dados);
+    
+    proffys.push(proffy);
+    return res.render("darAulas.html", {subjects,weekdays});
 }
+function Professor(objeto){
+    this.nome = objeto.nome;
+    this.avatar = objeto.avatar;
+    this.whatsapp = objeto.whatsapp;
+    this.bio = objeto.bio;
+    this.subject = objeto.subject;
+    this.cost = objeto.cost;
+    this.weekday = objeto.weekday;
+    this.time_from = objeto.time_from;
+    this.time_to = objeto.time_to;
 
+}
 
 const express = require('express');
 const server = express();
@@ -87,4 +103,5 @@ server.use(express.static("public"))   // arquivos static sao arquivos como css/
 .get("/", pageLanding)// quando eu entrar na "/" essa função ira me retornar uma resposta "/" é a rota) //uma configuração do servidor     
 .get("/estudar",pageStudy)
 .get("/darAulas",pageGiveClasses)
+//start servidor
 .listen(5500)
