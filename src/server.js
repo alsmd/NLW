@@ -26,6 +26,31 @@ const proffys = [ //estrutura de dados
 
 ]; //cada proffy é um objeto dentro de uma lista de objetos
 
+const subjects = [
+
+
+    "Artes",
+    "Biologia",
+    "Ciências",
+    "Educação fisica",
+    "Fisica",
+    "Geografia",
+    "Historia",
+    "Matematica",
+    "Português",
+    "Quimica"
+
+]
+const weekdays = [
+    "Domingo",
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
+    "Sabado"
+]
+
 //Functions
 
 //Requisições
@@ -34,7 +59,8 @@ function pageLanding(req,res){//req/ requisição vai me trazer mais informaçoe
 }
 
 function pageStudy(req,res){
-    return res.render("estudar.html", { proffys});
+    const filters = req.query;
+    return res.render("estudar.html", { proffys, filters, subjects,weekdays});
 }
 
 function pageGiveClasses(req,res){
@@ -45,7 +71,7 @@ function pageGiveClasses(req,res){
 const express = require('express');
 const server = express();
 
-//Configurando nunjucks
+//Configurando nunjucks  (template egine)
 const nunjucks = require('nunjucks');
 
 nunjucks.configure('src/views', {
@@ -56,7 +82,7 @@ nunjucks.configure('src/views', {
 
 
 
-//Configuração do servidor
+//inicio e Configuração do servidor
 server.use(express.static("public"))   // arquivos static sao arquivos como css/js/images     
 .get("/", pageLanding)// quando eu entrar na "/" essa função ira me retornar uma resposta "/" é a rota) //uma configuração do servidor     
 .get("/estudar",pageStudy)
