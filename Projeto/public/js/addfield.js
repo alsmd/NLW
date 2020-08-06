@@ -1,6 +1,6 @@
 
 
-
+//add new field in the form
 (function (){
     "use strict"
     var btn = document.querySelector("#add-time");
