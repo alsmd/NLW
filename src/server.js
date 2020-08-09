@@ -29,6 +29,6 @@ server.use(express.static("public"))   // arquivos static sao arquivos como css/
 .get("/", pageLanding)// quando eu entrar na "/" essa função ira me retornar uma resposta "/" é a rota) //uma configuração do servidor     
 .get("/estudar",pageStudy)
 .get("/darAulas",pageGiveClasses)
-.post("/save-class", saveClasses)
+.post("/save-classes", saveClasses)
 //start servidor
 .listen(5500)

@@ -45,6 +45,11 @@ async function pageStudy(req,res){
         const db = await Database
         const proffys = await db.all(query)
 
+        proffys.map((proffy) => {
+            proffy.subject = getSubject(proffy.subject)
+
+        })
+
         return res.render('estudar.html', {proffys,subjects, filters,weekdays})
 
     } catch (error) {
@@ -56,18 +61,6 @@ async function pageStudy(req,res){
 }
 
 function pageGiveClasses(req,res){
-    const data = req.body;
-    //data.subject = getSubject(data.subject) // caso eu fosse dar um push no proffys dereto com o data eu teria que tratar tanto o subject quanto o weekday para aparecer como string e nao como number
-    //criando um novo objeto proffy com os dados recebidos
-    var proffy = new Professor(data);
-    const isNotEmpty = Object.keys(data).length > 0;
-
-    //inserindo o novo objeto proffy na minha coleção
-    if(isNotEmpty) {
-        proffys.push(proffy); //eu poderia ter colocado o data direto no push, pois o data ja é um objeto
-
-        return res.redirect("/estudar")
-    }
 
     return res.render("darAulas.html", {subjects,weekdays});
 }
@@ -85,7 +78,53 @@ function Professor(objeto){
     this.time_to = objeto.time_to;
 
 }
-function saveClasses(req, res) {
+async function saveClasses(req, res) {
+    const createProffy = require('./database/createProffy')
+
+
+    const proffyValue = {
+        name: req.body.name,
+        avatar: req.body.avatar,
+        whatsapp: req.body.whatsapp,
+        bio: req.body.bio
+    }
+    const classValue = {
+        subject: req.body.subject,
+        cost: req.body.cost
+    }
+    const classScheduleValues = req.body.weekday.map((weekday,index) => {
+        return {
+            weekday: weekday,
+            time_from: convertHoursToMinutes(req.body.time_from[index]),
+            time_to:  convertHoursToMinutes(req.body.time_to[index])
+
+        }
+
+
+
+    })
+    try{
+        const db = await Database
+        await createProffy(db,{proffyValue,classValue,classScheduleValues})
+        let queryString = "?subjects=" + req.body.subject
+        queryString += "&weekday=" + req.body.weekday[0]
+        queryString += "&time=" + req.body.time_from[0]
+
+        return res.redirect("/estudar" + queryString)
+    } catch(error) {
+        console.log(error)
+    }
+    
+    //data.subject = getSubject(data.subject) // caso eu fosse dar um push no proffys dereto com o data eu teria que tratar tanto o subject quanto o weekday para aparecer como string e nao como number
+    //criando um novo objeto proffy com os dados recebidos
+   /*  var proffy = new Professor(data);
+    const isNotEmpty = Object.keys(data).length > 0;
+
+    //inserindo o novo objeto proffy na minha coleção
+    if(isNotEmpty) {
+        proffys.push(proffy); //eu poderia ter colocado o data direto no push, pois o data ja é um objeto
+
+    } */
 
 
 }
